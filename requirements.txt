@@ -1,2 +1,16 @@
 fastapi
 uvicorn
+sqlalchemy
+asyncpg
+pydantic-settings
+passlib==1.7.4
+bcrypt==4.0.1
+pyjwt
+python-multipart
+google-auth
+requests
+authlib
+itsdangerous
+pydantic
+email-validator
+httpx
