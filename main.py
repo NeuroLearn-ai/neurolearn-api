@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from starlette.middleware.sessions import SessionMiddleware
 from dotenv import load_dotenv
 import os
+import asyncio
 from database import engine, Base
 import routers
 
@@ -45,7 +46,8 @@ app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET_KEY")
 # Allow the Frontend to talk to this Backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, will change this to frontend URL
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
