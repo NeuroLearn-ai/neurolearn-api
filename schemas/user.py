@@ -7,6 +7,8 @@ class UserCreate(BaseModel):
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
+    name: str | None = None
+    avatar_url: str | None = None
     provider: str
     
     class Config:

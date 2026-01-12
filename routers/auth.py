@@ -3,7 +3,6 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from security import get_current_user
 
 import models
 import schemas
@@ -103,8 +102,10 @@ async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
         # Fallback manual fetch if userinfo is missing (rare)
         if not user_info:
             user_info = await security.oauth.google.userinfo(token=token)
-            
+                    
         email = user_info.get('email')
+        name = user_info.get('name')
+        avatar_url = user_info.get('picture')
         
         # C. Check DB (Hybrid Logic)
         result = await db.execute(select(models.User).where(models.User.email == email))
@@ -113,7 +114,9 @@ async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
         if not user:
             # CASE A: New User -> Create account automatically (No password)
             user = models.User(
-                email=email, 
+                email=email,
+                name=name,
+                avatar_url=avatar_url,
                 hashed_password=None, 
                 provider="google"
             )
@@ -135,9 +138,3 @@ async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
         return RedirectResponse(url="http://localhost:3000/auth/error")
     
 
-# --------------------------------------------------------------------------
-# 5. Get Current User Info
-# --------------------------------------------------------------------------
-@router.get("/me", response_model=schemas.UserResponse)
-async def read_users_me(current_user: models.User = Depends(get_current_user)):
-    return current_user

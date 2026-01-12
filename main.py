@@ -62,3 +62,4 @@ def health_check():
 
 app.include_router(routers.auth)
 app.include_router(routers.notes)
+app.include_router(routers.user)
