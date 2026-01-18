@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import OperationalError
 from contextlib import asynccontextmanager
 from starlette.middleware.sessions import SessionMiddleware
@@ -51,6 +52,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+upload_dir = os.getenv("UPLOAD_DIRECTORY", "static/uploads")
+
+os.makedirs(upload_dir, exist_ok=True)
+
+# Mount the "static" folder
+# This tells FastAPI: "If a URL starts with /static, look in the 'static' folder on disk"
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def read_root():

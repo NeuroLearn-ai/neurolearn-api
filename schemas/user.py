@@ -13,3 +13,11 @@ class UserResponse(BaseModel):
     
     class Config:
         from_attributes = True
+
+class UserUpdate(BaseModel):
+    email: EmailStr | None = None
+    name: str | None = None
+    avatar_url: str | None = None
+
+    class Config:
+        from_attributes = True
