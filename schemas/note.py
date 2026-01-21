@@ -1,13 +1,13 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 class PageResponse(BaseModel):
     id: int
     page_number: int
     background_type: str
     background_url: Optional[str] = None
-    overlay_data: Optional[dict] = None
+    overlay_data: Optional[Dict[str, Any]] = None
 
     class Config:
         from_attributes = True
